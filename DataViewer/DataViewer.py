@@ -63,7 +63,7 @@ class dataViewer(tk.Tk):
     def createWidget(self):
         for key in self.labels:
             self.vars[key] = tk.IntVar()
-            btn = tk.Checkbutton(master=self.rightframe, text=key, variable=self.vars[key], width=35, onvalue=1, offvalue=0, command=self.draw)
+            btn = tk.Checkbutton(master=self.rightframe, text=key, variable=self.vars[key], width=45, onvalue=1, offvalue=0, command=self.draw)
             self.btn[key] = btn
             btn.select()
             btn.config(font=font['label'])
