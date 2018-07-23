@@ -1,6 +1,14 @@
 # Data Viewer
 
-This is a simple python script that plots and shows the fluorescent curve with interactively using tkinter and matplotlib.
+This is a simple python script that plots and shows the fluorescent curve interactively using tkinter and matplotlib.
+
+### Requirements
+- Python3
+- tkinter
+- numpy
+- matplotlib
+- pandas
 
 ### Usage
-Put your csv file named *data.csv* in the folder of **DataViewer** and run the script.
+1. Make the script executable by `chmod +x DataViewer`
+2. Put your csv file named *data.csv* in the folder of **DataViewer** and run the script by `./DataViewer`.
