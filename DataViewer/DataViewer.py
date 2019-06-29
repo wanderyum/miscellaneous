@@ -22,12 +22,13 @@ dpi = 150
 ft = FontProperties(fname=r'c:\windows\fonts\simsun.ttc')
 
 class dataViewer(tk.Tk):
-    def __init__(self, font=font, figsize=figsize, dpi=dpi, fp = fp):
+    def __init__(self, title='', font=font, figsize=figsize, dpi=dpi, fp = fp):
         super().__init__()
         self.wm_title('Data Viewer')
         self.protocol('WM_DELETE_WINDOW', self._quit)
         self.resizable(width=False, height=False)
         
+        self.title = title
         self.font = font
         self.fp = fp
         self.figsize = figsize
@@ -36,7 +37,7 @@ class dataViewer(tk.Tk):
         
         self.createCanvas()
         
-    def load_data(self, df):
+    def load_data(self, df, title=''):
         self.vars = {}
         self.btn = {}
         self.df = df
@@ -48,11 +49,12 @@ class dataViewer(tk.Tk):
         self.maximum = (self.maximum // 500 + 1) * 500
         self.minimum = np.min(self.tmp)
         self.minimum = (self.minimum // 500 ) * 500
+        self.title = title
         self.createWidget()
         
-    def load_csv(self, path):
+    def load_csv(self, path, title=''):
         df = pd.read_csv(path)
-        self.load_data(df)
+        self.load_data(df, title)
     
     def set_color(self):
         self.color = {}
@@ -102,6 +104,8 @@ class dataViewer(tk.Tk):
                 self.ax.plot(x, y, label=key, color=self.color[key])
         self.ax.set_ylim([self.minimum, self.maximum])
         self.ax.set_xlim([0,self.length])
+        if self.title:
+            self.ax.set_title(self.title)
         self.ax.legend(prop=ft)
         self.canvas.draw()
 
@@ -137,5 +141,5 @@ if __name__ == '__main__':
         pass
     viewer = dataViewer()
     if 'data.csv' in files:
-        viewer.load_csv('data.csv')
+        viewer.load_csv('data.csv',title='TEST Title')
     viewer.mainloop()
