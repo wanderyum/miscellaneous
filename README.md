@@ -2,4 +2,4 @@
 
 Up to now the suit contains the following parts:
 
-[-] **DataViewer.** A project offers a class that plots .csv files interactively.
+- **DataViewer.** A project offers a class that plots .csv files interactively.
