@@ -17,7 +17,7 @@ This is a simple python script that plots and shows the fluorescent curve intera
 
 - Using Data Viewer as a class.
 ```python
-from DataViewer import dataViewer
+from dataviewer import dataViewer
 viewer = dataViewer()
 viewer.load_csv('data.csv')
 viewer.mainloop()

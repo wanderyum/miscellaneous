@@ -76,6 +76,11 @@ class dataViewer(tk.Tk):
         self.btnpanel.pack(side=tk.TOP)
         tk.Button(master=self.btnpanel, font=self.font['button'], text='打开', command=self.openfile).pack(side=tk.LEFT)
         tk.Button(master=self.btnpanel, font=self.font['button'], text='退出', command=self._quit).pack(side=tk.LEFT)
+        self.funcpanel = tk.Frame(master=self.rightframe)
+        self.funcpanel.pack(side=tk.TOP)
+        tk.Button(master=self.funcpanel, font=font['button'], text='反选', command=self.reverse).pack(side=tk.LEFT)
+        tk.Button(master=self.funcpanel, font=font['button'], text='全选', command=self.select_all).pack(side=tk.LEFT)
+        
     
     def createWidget(self):
         for key in self.labels:
@@ -90,6 +95,7 @@ class dataViewer(tk.Tk):
     def draw(self):
         x = np.linspace(0, self.length-1, self.length)
         self.ax.clear()
+
         for key in self.labels:
             if self.vars[key].get() > 0:
                 y = np.asarray(self.df.loc[:,[key]]).reshape(-1)
@@ -108,6 +114,19 @@ class dataViewer(tk.Tk):
                 self.btn[key].destroy()
             self.load_csv(filename)
 
+    def reverse(self):
+        for key in self.vars:
+            if self.vars[key].get() == 1:
+                self.btn[key].deselect()
+            else:
+                self.btn[key].select()
+        self.draw()
+        
+    def select_all(self):
+        for key in self.vars:
+            self.btn[key].select()
+        self.draw()
+            
     def _quit(self):
         self.quit()
         self.destroy()
