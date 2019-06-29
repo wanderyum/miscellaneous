@@ -10,5 +10,15 @@ This is a simple python script that plots and shows the fluorescent curve intera
 - pandas
 
 ### Usage
-1. Make the script executable by `chmod +x DataViewer`
-2. Put your csv file named *data.csv* in the folder of **DataViewer** and run the script by `./DataViewer`.
+- Using Data Viewer as an application.
+    1. (Optional)Copy the .csv file to the same folder where the DataViewer.py exists and rename it as data.csv.
+    2. Open the terminal at the folder
+    3. `python3 DataViewer.py`
+
+- Using Data Viewer as a class.
+```python
+from DataViewer import dataViewer
+viewer = dataViewer()
+viewer.load_csv('data.csv')
+viewer.mainloop()
+```
