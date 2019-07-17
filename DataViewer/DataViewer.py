@@ -1,41 +1,71 @@
 #!/usr/bin/env python3
 
+import os
 import numpy as np
 import pandas as pd
 import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-#from matplotlib.backends.backend_tkagg import NavigationToolbar2TkAgg
+from matplotlib.backends.backend_tkagg import NavigationToolbar2TkAgg
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 import tkinter as tk
 from tkinter import filedialog
 
-
+# 使用TkAgg后端
 matplotlib.use('TkAgg')
 
-font = {'label': ('times', 14, 'roman'),
+
+'''
+默认设置。 如果目录中有"dvcfg.json"则设置会被覆盖。
+'''
+cfg_def = {}
+# 窗口控件字体设置
+widgetfont = {'label': ('times', 14, 'roman'),
         'button': ('times', 18, 'bold')
         }
-fp = 'SimSun'   # 图表中字体
+ 
+# legend中所用字体, 支持中文
+legendfontdir = r'c:\windows\fonts\simsun.ttc'
+# 画布大小
 figsize = (6, 4)
+# 显示的DPI
 dpi = 150
-ft = FontProperties(fname=r'c:\windows\fonts\simsun.ttc')
+
+cfg_def['wid_ft'] = widgetfont
+cfg_def['leg_ft_dir'] = legendfontdir
+cfg_def['figsize'] = figsize
+cfg_def['dpi'] = dpi
 
 class dataViewer(tk.Tk):
-    def __init__(self, title='', font=font, figsize=figsize, dpi=dpi, fp = fp):
+    def __init__(self):
         super().__init__()
         self.wm_title('Data Viewer')
         self.protocol('WM_DELETE_WINDOW', self._quit)
         self.resizable(width=False, height=False)
         
-        self.title = title
-        self.font = font
-        self.fp = fp
-        self.figsize = figsize
-        self.dpi = dpi
+        self.load_cfg()
+
         self.btn = {}
         
         self.createCanvas()
+        
+    def load_cfg(self):
+        self.cfg = cfg_def
+        for root, dirs, files in os.walk('.'):
+            pass
+        if 'dvcfg.json' in files:
+            import json
+            with open('dvcfg.json') as f:
+                str_cfg = ''.join(f.readlines())
+            cfg = json.loads(str_cfg)
+            
+            for key in cfg:
+                self.cfg[key] = cfg[key]
+        self.cfg['leg_ft'] = FontProperties(fname=self.cfg['leg_ft_dir'])
+        
+    def show_cfg(self):
+        for item in self.cfg:
+            print('{}:\t{}'.format(item,self.cfg[item]))
         
     def load_data(self, df, title=''):
         self.vars = {}
@@ -62,26 +92,26 @@ class dataViewer(tk.Tk):
             self.color[self.labels[i]] = 'C' + str(i)
 
     def createCanvas(self):
-        fig = plt.figure(figsize=self.figsize, dpi=self.dpi)
+        fig = plt.figure(figsize=self.cfg['figsize'], dpi=self.cfg['dpi'])
         self.ax = fig.add_subplot(111)
         self.canvas = FigureCanvasTkAgg(fig, master=self)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        self.canvas._tkcanvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        self.canvas._tkcanvas.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=1)
 
-        #toolbar = NavigationToolbar2TkAgg(self.canvas, self)
-        #toolbar.update()
+        toolbar = NavigationToolbar2TkAgg(self.canvas, self)
+        toolbar.update()
         self.rightframe = tk.Frame(master=self)
         self.rightframe.pack(side=tk.RIGHT)
 
         self.btnpanel = tk.Frame(master=self.rightframe)
         self.btnpanel.pack(side=tk.TOP)
-        tk.Button(master=self.btnpanel, font=self.font['button'], text='打开', command=self.openfile).pack(side=tk.LEFT)
-        tk.Button(master=self.btnpanel, font=self.font['button'], text='退出', command=self._quit).pack(side=tk.LEFT)
+        tk.Button(master=self.btnpanel, font=self.cfg['wid_ft']['button'], text='打开', command=self.openfile).pack(side=tk.LEFT)
+        tk.Button(master=self.btnpanel, font=self.cfg['wid_ft']['button'], text='退出', command=self._quit).pack(side=tk.LEFT)
         self.funcpanel = tk.Frame(master=self.rightframe)
         self.funcpanel.pack(side=tk.TOP)
-        tk.Button(master=self.funcpanel, font=font['button'], text='反选', command=self.reverse).pack(side=tk.LEFT)
-        tk.Button(master=self.funcpanel, font=font['button'], text='全选', command=self.select_all).pack(side=tk.LEFT)
+        tk.Button(master=self.funcpanel, font=self.cfg['wid_ft']['button'], text='反选', command=self.reverse).pack(side=tk.LEFT)
+        tk.Button(master=self.funcpanel, font=self.cfg['wid_ft']['button'], text='全选', command=self.select_all).pack(side=tk.LEFT)
         
     
     def createWidget(self):
@@ -90,7 +120,7 @@ class dataViewer(tk.Tk):
             btn = tk.Checkbutton(master=self.rightframe, text=key, variable=self.vars[key], width=45, onvalue=1, offvalue=0, command=self.draw)
             self.btn[key] = btn
             btn.select()
-            btn.config(font=self.font['label'])
+            btn.config(font=self.cfg['wid_ft']['label'])
             btn.pack(side=tk.TOP)
         self.draw()
 
@@ -106,7 +136,7 @@ class dataViewer(tk.Tk):
         self.ax.set_xlim([0,self.length])
         if self.title:
             self.ax.set_title(self.title)
-        self.ax.legend(prop=ft)
+        self.ax.legend(prop=self.cfg['leg_ft'])
         self.canvas.draw()
 
     def openfile(self):
@@ -136,10 +166,10 @@ class dataViewer(tk.Tk):
         self.destroy()
 
 if __name__ == '__main__':
-    import os
-    for root, dirs, files in os.walk("."):
-        pass
     viewer = dataViewer()
+    viewer.show_cfg()
+    '''
     if 'data.csv' in files:
         viewer.load_csv('data.csv',title='TEST Title')
+    '''
     viewer.mainloop()

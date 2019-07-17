@@ -1,0 +1,6 @@
+{
+    "wid_ft": {"label": ["times", 14, "roman"], "button": ["times", 18, "bold"]}, 
+    "leg_ft_dir": "c:\\windows\\fonts\\simsun.ttc", 
+    "figsize": [9, 6], 
+    "dpi": 150
+}
