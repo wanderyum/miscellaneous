@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import matplotlib
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.backends.backend_tkagg import NavigationToolbar2TkAgg
+from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
 import tkinter as tk
@@ -97,12 +97,14 @@ class dataViewer(tk.Tk):
         self.canvas = FigureCanvasTkAgg(fig, master=self)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        self.canvas._tkcanvas.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=1)
+        self.canvas._tkcanvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
-        toolbar = NavigationToolbar2TkAgg(self.canvas, self)
+        toolbar = NavigationToolbar2Tk(self.canvas, self)
         toolbar.update()
+        toolbar.pack(side=tk.TOP)
         self.rightframe = tk.Frame(master=self)
         self.rightframe.pack(side=tk.RIGHT)
+
 
         self.btnpanel = tk.Frame(master=self.rightframe)
         self.btnpanel.pack(side=tk.TOP)
@@ -112,8 +114,8 @@ class dataViewer(tk.Tk):
         self.funcpanel.pack(side=tk.TOP)
         tk.Button(master=self.funcpanel, font=self.cfg['wid_ft']['button'], text='反选', command=self.reverse).pack(side=tk.LEFT)
         tk.Button(master=self.funcpanel, font=self.cfg['wid_ft']['button'], text='全选', command=self.select_all).pack(side=tk.LEFT)
-        
-    
+
+ 
     def createWidget(self):
         for key in self.labels:
             self.vars[key] = tk.IntVar()
@@ -122,6 +124,7 @@ class dataViewer(tk.Tk):
             btn.select()
             btn.config(font=self.cfg['wid_ft']['label'])
             btn.pack(side=tk.TOP)
+        plt.tight_layout()
         self.draw()
 
     def draw(self):
@@ -137,6 +140,7 @@ class dataViewer(tk.Tk):
         if self.title:
             self.ax.set_title(self.title)
         self.ax.legend(prop=self.cfg['leg_ft'])
+        plt.tight_layout()
         self.canvas.draw()
 
     def openfile(self):
@@ -172,4 +176,5 @@ if __name__ == '__main__':
     if 'data.csv' in files:
         viewer.load_csv('data.csv',title='TEST Title')
     '''
+    print(matplotlib.__version__)
     viewer.mainloop()
