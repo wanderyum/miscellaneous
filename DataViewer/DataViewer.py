@@ -48,6 +48,7 @@ class dataViewer(tk.Tk):
         self.btn = {}
         
         self.createCanvas()
+        self.createControlWidget()
         
     def load_cfg(self):
         self.cfg = cfg_def
@@ -80,7 +81,7 @@ class dataViewer(tk.Tk):
         self.minimum = np.min(self.tmp)
         self.minimum = (self.minimum // 500 ) * 500
         self.title = title
-        self.createWidget()
+        self.updateWidget()
         
     def load_csv(self, path, title=''):
         df = pd.read_csv(path)
@@ -94,37 +95,42 @@ class dataViewer(tk.Tk):
     def createCanvas(self):
         fig = plt.figure(figsize=self.cfg['figsize'], dpi=self.cfg['dpi'])
         self.ax = fig.add_subplot(111)
+        
         self.canvas = FigureCanvasTkAgg(fig, master=self)
-        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-
-        self.canvas._tkcanvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
         toolbar = NavigationToolbar2Tk(self.canvas, self)
         toolbar.update()
         toolbar.pack(side=tk.TOP)
+        self.canvas.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        
         self.rightframe = tk.Frame(master=self)
         self.rightframe.pack(side=tk.RIGHT)
+        
+        self.controlpanel = tk.Frame(master=self.rightframe, bg='red', width=500, height=500)
+        self.controlpanel.grid(row=0)
+        
+        self.datapanel = tk.Frame(master=self.rightframe, bg='red', width=500, height=200)
+        self.datapanel.grid(row=1)
+        
+    def createControlWidget(self):
+        
+        tk.Button(master=self.controlpanel, font=self.cfg['wid_ft']['button'], text='打开', width=15, command=self.openfile).grid(row=0, column=0, sticky=tk.N)
+        tk.Button(master=self.controlpanel, font=self.cfg['wid_ft']['button'], text='退出', width=15, command=self._quit).grid(row=0, column=1)
 
-
-        self.btnpanel = tk.Frame(master=self.rightframe)
-        self.btnpanel.pack(side=tk.TOP)
-        tk.Button(master=self.btnpanel, font=self.cfg['wid_ft']['button'], text='打开', command=self.openfile).pack(side=tk.LEFT)
-        tk.Button(master=self.btnpanel, font=self.cfg['wid_ft']['button'], text='退出', command=self._quit).pack(side=tk.LEFT)
-        self.funcpanel = tk.Frame(master=self.rightframe)
-        self.funcpanel.pack(side=tk.TOP)
-        tk.Button(master=self.funcpanel, font=self.cfg['wid_ft']['button'], text='反选', command=self.reverse).pack(side=tk.LEFT)
-        tk.Button(master=self.funcpanel, font=self.cfg['wid_ft']['button'], text='全选', command=self.select_all).pack(side=tk.LEFT)
+        tk.Button(master=self.controlpanel, font=self.cfg['wid_ft']['button'], text='反选', width=15, command=self.reverse).grid(row=1, column=0)
+        tk.Button(master=self.controlpanel, font=self.cfg['wid_ft']['button'], text='全选', width=15, command=self.select_all).grid(row=1, column=1)
 
  
-    def createWidget(self):
+    def updateWidget(self):
+        i = 0
         for key in self.labels:
             self.vars[key] = tk.IntVar()
-            btn = tk.Checkbutton(master=self.rightframe, text=key, variable=self.vars[key], width=45, onvalue=1, offvalue=0, command=self.draw)
+            btn = tk.Checkbutton(master=self.datapanel, text=key, variable=self.vars[key], width=40, onvalue=1, offvalue=0, command=self.draw, anchor=tk.W, padx=0)
             self.btn[key] = btn
             btn.select()
             btn.config(font=self.cfg['wid_ft']['label'])
-            btn.pack(side=tk.TOP)
-        plt.tight_layout()
+            btn.grid(row=i, column=0, sticky=tk.NSEW)
+            i += 1
         self.draw()
 
     def draw(self):
@@ -176,5 +182,4 @@ if __name__ == '__main__':
     if 'data.csv' in files:
         viewer.load_csv('data.csv',title='TEST Title')
     '''
-    print(matplotlib.__version__)
     viewer.mainloop()
