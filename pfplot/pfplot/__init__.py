@@ -7,8 +7,11 @@ def ver():
 # 默认作图设置 #
 ################
 
-figsize = (12, 9)
+figsize = (9, 6)
 dpi = 150
+
+x_label = 'x label'
+y_label = 'y label'
 
 # 字体相关
 label_font_size     = 18
@@ -32,5 +35,11 @@ data_max = 1000
 x_label = ''
 y_label = ''
 
+# 存储作图指令
+plot_ins    = []
+x           = []
+y           = []
+labels      = []
+
 from .pfcfg import cfg
-from .plotting import plot, plot_error, set_labels
+from .plotting import plot, plot_error, set_labels, show
