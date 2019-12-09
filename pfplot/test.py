@@ -11,5 +11,7 @@ pf.plot(x, y, 'test', linestyle=' ')
 pf.plot(x, z, 'test2')
 pf.set_labels('Time (min.)', 'Fluorescence Intensity (a.u.)')
 
-pf.show()
+#pf.show()
 #pf.savefig('test.png')
+print(dir(pf))
+#print(dir(pf))
