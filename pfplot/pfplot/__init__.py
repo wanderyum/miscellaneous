@@ -20,9 +20,18 @@ legend_font_size    = 16
 
 
 # 作图相关
-line_width  = 1.5
+line_width  = 1.5     
+error_bar_line_width = 1
+marker_size = 7
 x_shifting  = 0
 capsize     = 3
+colors_seq  = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9'][::-1]
+
+# 可选列表: https://matplotlib.org/api/markers_api.html#module-matplotlib.markers
+markers_seq = ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o'][::-1]    
+
+# 可选: [‘solid’ | ‘dashed’, ‘dashdot’, ‘dotted’ | (offset, on-off-dash-seq) | '-' | '--' | '-.' | ':' | 'None' | ' ' | '']
+line_styles_seq = ['solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid', 'solid'][::-1]
 
 legend_frameon  = True      # legend是否有边框
 legend_location = 'best'    # 可选: upper right/upper lef/lower left/lower right/right/center left...
@@ -40,6 +49,11 @@ plot_ins    = []
 x           = []
 y           = []
 labels      = []
+colors      = []
+linestyles  = []
+markers     = []
+
+plt_tmp = None
 
 from .pfcfg import cfg
-from .plotting import plot, plot_error, set_labels, show
+from .plotting import plot, plot_error, set_labels, show, savefig

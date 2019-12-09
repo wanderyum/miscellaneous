@@ -7,7 +7,9 @@ pf.cfg()
 x = np.linspace(0, 11, 12)
 y = 2 * x
 z = 3 * x
-pf.plot(x, y, 'test')
+pf.plot(x, y, 'test', linestyle=' ')
 pf.plot(x, z, 'test2')
 pf.set_labels('Time (min.)', 'Fluorescence Intensity (a.u.)')
+
 pf.show()
+#pf.savefig('test.png')
