@@ -91,8 +91,9 @@ def exec_plot(plt):
                 label=pf.labels.pop(), color=color, linestyle=linestyle, 
                 marker=marker, markersize=pf.marker_size, linewidth=pf.line_width)
         pf.plot_ins.pop()
+
     
-    if pf.plot_ins[-1] == 'plot_err':
+    elif pf.plot_ins[-1] == 'plot_err':
         color = pf.colors.pop()
         if color is None:
             color = pf.colors_seq.pop()
