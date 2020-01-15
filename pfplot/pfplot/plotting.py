@@ -2,6 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pfplot as pf
 
+def reset():
+    pf.plot_ins = []
+    pf.x = []
+    pf.y = []
+    pf.labels = []
+    pf.colors = []
+    pf.linestyles = []
+    pf.markers = []    
+    pf.__init__('whatever')
+
+
 def set_labels(x_label, y_label):
     pf.x_label = x_label
     pf.y_label = y_label
@@ -56,7 +67,7 @@ def plot_error(x, y, yerr, label, color=None, linestyle=None, marker=None):
     pf.linestyles.append(linestyle)
     pf.markers.append(marker)
     
-def plot_error_array(x, arr2d, err_arr2d, labels, colors=None, linestyles=None, markers=None):
+def plot_error_array(x, arr2d, err_arr2d, labels, colors=None, linestyles=None, markers=None, errorevery=1):
     l, m = arr2d.shape[0], arr2d.shape[1]
     if colors is None:
         colors = pf.colors_seq[:l]
@@ -64,6 +75,8 @@ def plot_error_array(x, arr2d, err_arr2d, labels, colors=None, linestyles=None, 
         linestyles = pf.line_styles_seq[:l]
     if markers is None:
         markers = pf.markers_seq[:l]
+        
+    pf.errorevery = errorevery
         
     for i in range(m):
         plot_error(x, arr2d[:, i], yerr=err_arr2d[:, i], label=labels[i], color=colors[i], linestyle=linestyles[i], marker=markers[i])
@@ -108,7 +121,7 @@ def exec_plot(plt):
         
         plt.errorbar(pf.x.pop(), pf.y.pop()[pf.data_min:pf.data_max+1], yerr=pf.yerr.pop()[pf.data_min:pf.data_max+1], label=pf.labels.pop(), 
                     color=color, linestyle=linestyle, marker=marker, markersize=pf.marker_size, linewidth=pf.line_width,
-                    capsize=pf.capsize, elinewidth=pf.error_bar_line_width)
+                    capsize=pf.capsize, elinewidth=pf.error_bar_line_width, errorevery=pf.errorevery)
         pf.plot_ins.pop()
         
     
