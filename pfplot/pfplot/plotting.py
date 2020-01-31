@@ -154,3 +154,14 @@ def savefig(name):
         construct_figure()
     pf.plt_tmp.savefig(name)
     print('Figure saved:\n{}'.format(name))
+    
+def select(target, sequence):
+    if type(target) == type([]):
+        res = []
+        for item in sequence:
+            res.append(target[item])
+        return res
+    elif type(target) == type(np.array([1,2,3])):
+        return target[:, sequence]
+    else:
+        return target

@@ -1,4 +1,4 @@
-_version = 0.1
+_version = 0.12
 
 def ver():
     return _version
@@ -59,4 +59,5 @@ plt_tmp = None
 from .pfcfg import cfg, save_cfg, show_cfg
 from .plotting import gen_x, plot, plot_array, plot_error, plot_error_array, show, savefig
 from .plotting import reset, set_labels, set_data_range, set_legend_loc
+from .plotting import select
 
