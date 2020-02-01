@@ -165,3 +165,9 @@ def select(target, sequence):
         return target[:, sequence]
     else:
         return target
+        
+def group_select(list_to_be_selected, sequence):
+    res = []
+    for item in list_to_be_selected:
+        res.append(select(item, sequence))
+    return res
